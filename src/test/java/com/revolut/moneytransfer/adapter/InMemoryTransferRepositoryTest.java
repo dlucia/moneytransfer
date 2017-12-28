@@ -1,5 +1,6 @@
 package com.revolut.moneytransfer.adapter;
 
+import com.revolut.moneytransfer.domain.model.AccountTransfer;
 import com.revolut.moneytransfer.domain.model.AccountTransferRequest;
 import com.revolut.moneytransfer.domain.repository.IdGenerator;
 import org.jmock.Expectations;
@@ -16,11 +17,12 @@ import static org.junit.Assert.assertThat;
 
 public class InMemoryTransferRepositoryTest
 {
-  private static final AccountTransferRequest ACCOUNT_TRANSFER = new AccountTransferRequest("aaa",
-                                                                                            "USD",
-                                                                                            "GBP",
-                                                                                            ONE,
-                                                                                            "");
+  private static final AccountTransfer ACCOUNT_TRANSFER = new AccountTransfer("aaa",
+                                                                              "USD",
+                                                                              "GBP",
+                                                                              ONE,
+                                                                              ONE,
+                                                                              "");
 
   @Rule
   public JUnitRuleMockery context = new JUnitRuleMockery();
@@ -28,7 +30,7 @@ public class InMemoryTransferRepositoryTest
   private IdGenerator idGenerator;
 
   private InMemoryTransferRepository repository;
-  private Map<String, AccountTransferRequest> storage;
+  private Map<String, AccountTransfer> storage;
 
   @Before
   public void setUp()

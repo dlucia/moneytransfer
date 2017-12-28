@@ -32,6 +32,11 @@ public class AccountTransferService
     customerAccountRepository.updateAccount(transfer.customerId(), from);
     customerAccountRepository.updateAccount(transfer.customerId(), to);
 
-    transferRepository.save(transfer);
+    transferRepository.save(new AccountTransfer(transfer.customerId(),
+                                                transfer.from(),
+                                                transfer.to(),
+                                                transfer.amount(),
+                                                currencyRate.value(),
+                                                transfer.getNote()));
   }
 }
