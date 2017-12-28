@@ -10,7 +10,7 @@ import static org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory.
 public class Application
 {
   public static final String BASE_URI = "http://localhost:8080/revolut/";
-  private static final String RESOURCE_PACKAGE = "com.revolut.moneytransfer.api";
+  private static final String RESOURCE_PACKAGE = "com.revolut.moneytransfer";
 
   public static void main(String[] args)
   {
