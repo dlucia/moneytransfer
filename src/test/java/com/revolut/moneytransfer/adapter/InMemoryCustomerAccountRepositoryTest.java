@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static com.revolut.moneytransfer.domain.model.AccountBuilder.anAccount;
 import static java.math.BigDecimal.ONE;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
@@ -18,7 +19,7 @@ public class InMemoryCustomerAccountRepositoryTest
 {
   private static final Account EUR_ACCOUNT = new Account("EUR", of(new BigDecimal("14.15"), "EUR"));
   private static final Account CHF_ACCOUNT = new Account("CHF", of(ONE, "CHF"));
-  private static final Account NOT_EXISTENT_ACCOUNT = new Account("XXX", of(ONE, "CHF"));
+  private static final Account NOT_EXISTENT_ACCOUNT = anAccount().withName("XXX").build();
 
   private InMemoryCustomerAccountRepository repository;
   private Map<String, List<Account>> storage;

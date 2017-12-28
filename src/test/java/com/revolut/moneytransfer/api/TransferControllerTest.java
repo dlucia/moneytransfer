@@ -1,13 +1,13 @@
 package com.revolut.moneytransfer.api;
 
 import com.revolut.moneytransfer.Application;
-import com.revolut.moneytransfer.api.TransferRequestDTO;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.*;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import static com.revolut.moneytransfer.api.TransferRequestBuilder.aTransferRequest;
 import static javax.ws.rs.client.ClientBuilder.newClient;
 import static javax.ws.rs.client.Entity.json;
 import static org.hamcrest.CoreMatchers.is;
@@ -39,7 +39,11 @@ public class TransferControllerTest
     Response response =
         target.path(TRANSFER_PATH)
             .request()
-            .post(json(new TransferRequestDTO("customerId1", "EUR", "GBP", "1", "")));
+            .post(json(aTransferRequest()
+                           .withCustomerID("customerId1")
+                           .withAccountFrom("EUR")
+                           .withAccountTo("GBP")
+                           .build()));
 
     assertThat(response.getStatus(), is(202));
   }
@@ -50,8 +54,12 @@ public class TransferControllerTest
     Response response =
         target.path(TRANSFER_PATH)
             .request()
-            .post(json(new TransferRequestDTO("customerId1", "XXX", "GBP", "1", "")));
+            .post(json(aTransferRequest()
+                           .withCustomerID("customerId1")
+                           .withAccountFrom("notExistent")
+                           .build()));
 
     assertThat(response.getStatus(), is(404));
+    assertThat(response.readEntity(String.class), is("Account with id notExistent not found"));
   }
 }
