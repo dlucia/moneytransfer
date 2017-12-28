@@ -13,8 +13,8 @@ public class TransferController
   @Consumes(APPLICATION_JSON)
   public Response transfer(TransferRequestDTO dto)
   {
-    if (dto.accountFrom.equalsIgnoreCase("XXX"))
-      throw new AccountNotFoundException(dto.accountFrom);
+    AccountTransferRequest request = new TransferRequestConverter().convertFrom(dto);
+    new AccountTransferService().execute(request);
 
     return accepted().build();
   }
