@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 
 public class TransferControllerTest
 {
-  private static final String TRANSFER_PATH = "api/v1/transfers";
+  private static final String TRANSFER_PATH = "v1/transfers";
 
   private HttpServer server;
   private WebTarget target;

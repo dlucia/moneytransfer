@@ -21,7 +21,7 @@ import static org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory.
 
 public class Application
 {
-  public static final String BASE_URI = "http://localhost:8080/revolut/";
+  public static final String BASE_URI = "http://localhost:8080/api/";
   private static final String RESOURCE_PACKAGE = "com.revolut.moneytransfer.api";
 
   public static void main(String[] args)

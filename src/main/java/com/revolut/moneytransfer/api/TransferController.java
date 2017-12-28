@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.accepted;
 
-@Path("api/v1/transfers")
+@Path("v1/transfers")
 public class TransferController
 {
   private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
