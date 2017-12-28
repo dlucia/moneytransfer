@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.api;
+package com.revolut.moneytransfer.api.exception;
 
 import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
 
