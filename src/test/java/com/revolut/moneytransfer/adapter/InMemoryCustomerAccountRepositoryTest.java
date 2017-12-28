@@ -1,6 +1,6 @@
 package com.revolut.moneytransfer.adapter;
 
-import com.revolut.moneytransfer.domain.AccountNotFoundException;
+import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
 import com.revolut.moneytransfer.domain.model.Account;
 import org.junit.Before;
 import org.junit.Test;

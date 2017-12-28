@@ -1,5 +1,7 @@
-package com.revolut.moneytransfer;
+package com.revolut.moneytransfer.api;
 
+import com.revolut.moneytransfer.Application;
+import com.revolut.moneytransfer.api.TransferRequestDTO;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.*;
 

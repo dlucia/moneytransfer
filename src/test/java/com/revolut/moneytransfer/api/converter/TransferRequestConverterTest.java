@@ -1,5 +1,8 @@
-package com.revolut.moneytransfer;
+package com.revolut.moneytransfer.api.converter;
 
+import com.revolut.moneytransfer.api.TransferRequestDTO;
+import com.revolut.moneytransfer.api.converter.Converter;
+import com.revolut.moneytransfer.api.converter.TransferRequestConverter;
 import com.revolut.moneytransfer.domain.model.AccountTransferRequest;
 import org.junit.Before;
 import org.junit.Test;

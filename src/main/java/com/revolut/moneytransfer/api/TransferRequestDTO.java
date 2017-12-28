@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer;
+package com.revolut.moneytransfer.api;
 
 import java.util.Objects;
 

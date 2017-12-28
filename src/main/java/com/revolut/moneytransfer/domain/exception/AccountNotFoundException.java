@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.domain;
+package com.revolut.moneytransfer.domain.exception;
 
 import static java.lang.String.format;
 

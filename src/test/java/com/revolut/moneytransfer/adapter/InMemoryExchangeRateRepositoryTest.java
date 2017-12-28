@@ -1,6 +1,6 @@
 package com.revolut.moneytransfer.adapter;
 
-import com.revolut.moneytransfer.domain.RateNotExistentException;
+import com.revolut.moneytransfer.domain.exception.RateNotExistentException;
 import com.revolut.moneytransfer.domain.model.CurrencyRate;
 import org.junit.Before;
 import org.junit.Test;

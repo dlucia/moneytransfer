@@ -1,6 +1,6 @@
-package com.revolut.moneytransfer;
+package com.revolut.moneytransfer.api;
 
-import com.revolut.moneytransfer.domain.AccountNotFoundException;
+import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
