@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import javax.money.CurrencyUnit;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.math.BigDecimal.ONE;
 import static org.hamcrest.CoreMatchers.is;
@@ -47,5 +48,11 @@ public class InMemoryExchangeRateRepositoryTest
   public void notExistentRate()
   {
     repository.rateFor(EUR, GBP);
+  }
+
+  @Test
+  public void sameCurrency()
+  {
+    assertThat(repository.rateFor(EUR, EUR), is(new CurrencyRate(ONE)));
   }
 }

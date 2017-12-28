@@ -7,6 +7,8 @@ import com.revolut.moneytransfer.domain.repository.ExchangeRateRepository;
 import javax.money.CurrencyUnit;
 import java.util.Map;
 
+import static java.math.BigDecimal.ONE;
+
 public class InMemoryExchangeRateRepository implements ExchangeRateRepository
 {
   private final Map<String, CurrencyRate> storage;
@@ -18,6 +20,9 @@ public class InMemoryExchangeRateRepository implements ExchangeRateRepository
 
   @Override public CurrencyRate rateFor(CurrencyUnit currencyFrom, CurrencyUnit currencyTo)
   {
+    if (currencyFrom.equals(currencyTo))
+      return new CurrencyRate(ONE);
+
     String key = key(currencyFrom, currencyTo);
     CurrencyRate currencyRate = storage.get(key);
     if (currencyRate == null)
