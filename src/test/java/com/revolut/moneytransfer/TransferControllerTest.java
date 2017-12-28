@@ -37,8 +37,19 @@ public class TransferControllerTest
     Response response =
         target.path(TRANSFER_PATH)
             .request()
-            .post(json(new TransferRequestDTO()));
+            .post(json(new TransferRequestDTO("customerId1", "EUR", "GBP", "1", "")));
 
     assertThat(response.getStatus(), is(202));
+  }
+
+  @Test
+  public void accountNotFound()
+  {
+    Response response =
+        target.path(TRANSFER_PATH)
+            .request()
+            .post(json(new TransferRequestDTO("customerId1", "XXX", "GBP", "1", "")));
+
+    assertThat(response.getStatus(), is(404));
   }
 }
