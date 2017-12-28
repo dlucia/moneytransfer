@@ -46,7 +46,7 @@ public class TransferRequestDTO
 
   @Override public String toString()
   {
-    return "TransferRequestDTO{" +
+    return "TransferRequest{" +
         "customerId='" + customerId + '\'' +
         ", from='" + accountFrom + '\'' +
         ", to='" + accountTo + '\'' +
