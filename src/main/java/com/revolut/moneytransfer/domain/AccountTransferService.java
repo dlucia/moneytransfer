@@ -5,7 +5,6 @@ import com.revolut.moneytransfer.domain.repository.*;
 
 public class AccountTransferService
 {
-
   private final CustomerAccountRepository customerAccountRepository;
   private final ExchangeRateRepository exchangeRateRepository;
   private final TransferRepository transferRepository;

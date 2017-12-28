@@ -78,7 +78,6 @@ public class Account
 
   @Override public int hashCode()
   {
-
     return Objects.hash(name, currency, balance);
   }
 }
