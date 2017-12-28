@@ -1,50 +1,36 @@
 package com.revolut.moneytransfer.api;
 
-import com.revolut.moneytransfer.adapter.*;
-import com.revolut.moneytransfer.api.converter.TransferRequestConverter;
+import com.revolut.moneytransfer.api.converter.Converter;
 import com.revolut.moneytransfer.domain.AccountTransferService;
-import com.revolut.moneytransfer.domain.model.*;
-import org.javamoney.moneta.Money;
+import com.revolut.moneytransfer.domain.model.AccountTransferRequest;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.math.BigDecimal;
-import java.util.*;
 
-import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.TEN;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.accepted;
 
-@Path("transfers")
+@Path("api/v1/transfers")
 public class TransferController
 {
+  private final Converter converter;
+  private final AccountTransferService transferService;
+
+  @Inject
+  public TransferController(Converter converter,
+                            AccountTransferService transferService)
+  {
+    this.converter = converter;
+    this.transferService = transferService;
+  }
+
   @POST
   @Consumes(APPLICATION_JSON)
   public Response transfer(TransferRequestDTO dto)
   {
-    AccountTransferRequest request = new TransferRequestConverter().convertFrom(dto);
-    new AccountTransferService(
-        new InMemoryCustomerAccountRepository(
-            new HashMap<String, List<Account>>()
-            {{
-              put("customerId1", new ArrayList<Account>()
-              {{
-                add(new Account("EUR", Money.of(TEN, "EUR")));
-                add(new Account("GBP", Money.of(ONE, "GBP")));
-              }});
-              put("customerId2", new ArrayList<Account>()
-              {{
-                add(new Account("GBP", Money.of(ONE, "GBP")));
-              }});
-            }}
-        ),
-        new InMemoryExchangeRateRepository(new HashMap<String, CurrencyRate>()
-        {{
-          put("EUR-GBP", new CurrencyRate(new BigDecimal("0.89")));
-        }}),
-        new InMemoryTransferRepository(new UUIDIdGenerator(), new HashMap<>()))
-        .execute(request);
+    AccountTransferRequest transfer = converter.convertFrom(dto);
+    transferService.execute(transfer);
 
     return accepted().build();
   }
