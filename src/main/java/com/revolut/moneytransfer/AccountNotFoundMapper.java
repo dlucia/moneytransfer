@@ -1,5 +1,7 @@
 package com.revolut.moneytransfer;
 
+import com.revolut.moneytransfer.domain.AccountNotFoundException;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;

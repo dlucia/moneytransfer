@@ -1,5 +1,6 @@
 package com.revolut.moneytransfer;
 
+import com.revolut.moneytransfer.domain.AccountTransferRequest;
 import org.junit.Before;
 import org.junit.Test;
 

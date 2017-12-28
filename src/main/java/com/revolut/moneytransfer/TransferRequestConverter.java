@@ -1,5 +1,7 @@
 package com.revolut.moneytransfer;
 
+import com.revolut.moneytransfer.domain.AccountTransferRequest;
+
 import java.math.BigDecimal;
 
 public class TransferRequestConverter implements Converter

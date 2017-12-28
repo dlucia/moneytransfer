@@ -1,5 +1,8 @@
 package com.revolut.moneytransfer;
 
+import com.revolut.moneytransfer.domain.AccountTransferRequest;
+import com.revolut.moneytransfer.domain.AccountTransferService;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
