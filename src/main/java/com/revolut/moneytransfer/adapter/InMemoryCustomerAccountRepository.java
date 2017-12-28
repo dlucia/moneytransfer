@@ -4,12 +4,30 @@ import com.revolut.moneytransfer.domain.AccountNotFoundException;
 import com.revolut.moneytransfer.domain.model.Account;
 import com.revolut.moneytransfer.domain.repository.CustomerAccountRepository;
 
+import java.util.*;
+
 public class InMemoryCustomerAccountRepository implements CustomerAccountRepository
 {
-  @Override public Account lookup(String customerId, String account)
+  private final Map<String, List<Account>> storage;
+
+  public InMemoryCustomerAccountRepository(Map<String, List<Account>> storage)
   {
-    if (account.equalsIgnoreCase("XXX"))
-      throw new AccountNotFoundException(account);
-    return null;
+    this.storage = storage;
+  }
+
+  @Override public Account lookup(String customerId, String accountID)
+  {
+    List<Account> accounts = storage.get(customerId);
+
+    return accounts
+        .stream()
+        .filter(a -> a.name().equalsIgnoreCase(accountID))
+        .findFirst()
+        .orElseThrow(() -> new AccountNotFoundException(accountID));
+  }
+
+  @Override public void updateAccount(String customerId, Account account)
+  {
+
   }
 }
