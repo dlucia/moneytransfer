@@ -1,6 +1,7 @@
 package com.revolut.moneytransfer.adapter;
 
 import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
+import com.revolut.moneytransfer.domain.exception.CustomerNotFoundException;
 import com.revolut.moneytransfer.domain.model.Account;
 import com.revolut.moneytransfer.domain.repository.CustomerAccountRepository;
 
@@ -19,6 +20,8 @@ public class InMemoryCustomerAccountRepository implements CustomerAccountReposit
   @Override public Account lookup(String customerId, String accountID)
   {
     List<Account> accounts = storage.get(customerId);
+    if (accounts == null)
+      throw new CustomerNotFoundException(customerId);
 
     return accounts
         .stream()

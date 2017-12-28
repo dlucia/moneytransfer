@@ -1,6 +1,7 @@
 package com.revolut.moneytransfer.adapter;
 
 import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
+import com.revolut.moneytransfer.domain.exception.CustomerNotFoundException;
 import com.revolut.moneytransfer.domain.model.Account;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,8 @@ public class InMemoryCustomerAccountRepositoryTest
   private static final Account EUR_ACCOUNT = new Account("EUR", of(new BigDecimal("14.15"), "EUR"));
   private static final Account CHF_ACCOUNT = new Account("CHF", of(ONE, "CHF"));
   private static final Account NOT_EXISTENT_ACCOUNT = anAccount().withName("XXX").build();
+  private static final String CUSTOMER_ID = "cc1";
+  private static final String NOT_EXISTTENT_CUSTOMER_ID = "xxx";
 
   private InMemoryCustomerAccountRepository repository;
   private Map<String, List<Account>> storage;
@@ -30,7 +33,7 @@ public class InMemoryCustomerAccountRepositoryTest
   {
     storage = new HashMap<String, List<Account>>()
     {{
-      put("cc1", new ArrayList<Account>()
+      put(CUSTOMER_ID, new ArrayList<Account>()
       {{
         add(EUR_ACCOUNT);
         add(CHF_ACCOUNT);
@@ -44,29 +47,35 @@ public class InMemoryCustomerAccountRepositoryTest
   @Test
   public void found()
   {
-    assertThat(repository.lookup("cc1", "EUR"), is(EUR_ACCOUNT));
+    assertThat(repository.lookup(CUSTOMER_ID, "EUR"), is(EUR_ACCOUNT));
   }
 
   @Test(expected = AccountNotFoundException.class)
-  public void notFound()
+  public void accountNotFound()
   {
-    repository.lookup("cc1", NOT_EXISTENT_ACCOUNT.name());
+    repository.lookup(CUSTOMER_ID, NOT_EXISTENT_ACCOUNT.name());
+  }
+
+  @Test(expected = CustomerNotFoundException.class)
+  public void customerNotFound()
+  {
+    repository.lookup(NOT_EXISTTENT_CUSTOMER_ID, "EUR");
   }
 
   @Test
   public void updateAccount()
   {
-    assertThat(storage.get("cc1"), containsInAnyOrder(EUR_ACCOUNT, CHF_ACCOUNT));
+    assertThat(storage.get(CUSTOMER_ID), containsInAnyOrder(EUR_ACCOUNT, CHF_ACCOUNT));
 
     Account account = new Account("EUR", of(new BigDecimal("4.55"), "EUR"));
-    repository.updateAccount("cc1", account);
-    assertThat(storage.get("cc1"), containsInAnyOrder(CHF_ACCOUNT, account));
+    repository.updateAccount(CUSTOMER_ID, account);
+    assertThat(storage.get(CUSTOMER_ID), containsInAnyOrder(CHF_ACCOUNT, account));
   }
 
   @Test(expected = AccountNotFoundException.class)
   public void updateNotExistentAccount()
   {
-    repository.updateAccount("cc1", NOT_EXISTENT_ACCOUNT);
+    repository.updateAccount(CUSTOMER_ID, NOT_EXISTENT_ACCOUNT);
   }
 
 }

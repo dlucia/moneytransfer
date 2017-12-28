@@ -50,6 +50,20 @@ public class TransferControllerTest
   }
 
   @Test
+  public void customerNotFound()
+  {
+    Response response =
+        target.path(TRANSFER_PATH)
+            .request()
+            .post(json(aTransferRequest()
+                           .withCustomerID("notExistent")
+                           .build()));
+
+    assertThat(response.getStatus(), is(404));
+    assertThat(response.readEntity(String.class), is("Customer with id notExistent not found"));
+  }
+
+  @Test
   public void accountNotFound()
   {
     Response response =
