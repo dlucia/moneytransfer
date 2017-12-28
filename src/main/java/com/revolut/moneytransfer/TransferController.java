@@ -1,7 +1,8 @@
 package com.revolut.moneytransfer;
 
-import com.revolut.moneytransfer.domain.AccountTransferRequest;
+import com.revolut.moneytransfer.adapter.InMemoryCustomerAccountRepository;
 import com.revolut.moneytransfer.domain.AccountTransferService;
+import com.revolut.moneytransfer.domain.model.AccountTransferRequest;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -17,7 +18,7 @@ public class TransferController
   public Response transfer(TransferRequestDTO dto)
   {
     AccountTransferRequest request = new TransferRequestConverter().convertFrom(dto);
-    new AccountTransferService().execute(request);
+    new AccountTransferService(new InMemoryCustomerAccountRepository()).execute(request);
 
     return accepted().build();
   }
