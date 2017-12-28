@@ -12,6 +12,7 @@ import static com.revolut.moneytransfer.domain.model.AccountBuilder.anAccount;
 import static java.math.BigDecimal.ONE;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.javamoney.moneta.Money.of;
 import static org.junit.Assert.assertThat;
 
@@ -50,6 +51,22 @@ public class InMemoryCustomerAccountRepositoryTest
   public void notFound()
   {
     repository.lookup("cc1", NOT_EXISTENT_ACCOUNT.name());
+  }
+
+  @Test
+  public void updateAccount()
+  {
+    assertThat(storage.get("cc1"), containsInAnyOrder(EUR_ACCOUNT, CHF_ACCOUNT));
+
+    Account account = new Account("EUR", of(new BigDecimal("4.55"), "EUR"));
+    repository.updateAccount("cc1", account);
+    assertThat(storage.get("cc1"), containsInAnyOrder(CHF_ACCOUNT, account));
+  }
+
+  @Test(expected = AccountNotFoundException.class)
+  public void updateNotExistentAccount()
+  {
+    repository.updateAccount("cc1", NOT_EXISTENT_ACCOUNT);
   }
 
 }
