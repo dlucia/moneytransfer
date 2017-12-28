@@ -2,7 +2,7 @@ package com.revolut.moneytransfer.domain.exception;
 
 import static java.lang.String.format;
 
-public class AccountNotFoundException extends RuntimeException
+public class AccountNotFoundException extends TransferException
 {
   private static final long serialVersionUID = -3851372851061781778L;
 

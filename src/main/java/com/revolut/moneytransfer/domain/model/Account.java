@@ -1,5 +1,8 @@
 package com.revolut.moneytransfer.domain.model;
 
+import com.revolut.moneytransfer.domain.exception.InsufficientBalanceException;
+import com.revolut.moneytransfer.domain.exception.NegativeAmountException;
+
 import javax.money.*;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -39,6 +42,10 @@ public class Account
   public void reduceBalanceOf(BigDecimal amount)
   {
     MonetaryAmount moneyAmount = of(amount, currency);
+    validate(moneyAmount);
+
+    if (balance.isLessThan(moneyAmount))
+      throw new InsufficientBalanceException(balance, moneyAmount);
 
     balance = balance.subtract(moneyAmount);
   }
@@ -46,8 +53,15 @@ public class Account
   public void increaseBalanceOf(BigDecimal amount)
   {
     MonetaryAmount moneyAmount = of(amount, currency);
+    validate(moneyAmount);
 
     balance = balance.add(moneyAmount);
+  }
+
+  private void validate(MonetaryAmount amount)
+  {
+    if (amount.isNegative())
+      throw new NegativeAmountException(amount);
   }
 
   @Override public boolean equals(Object o)
