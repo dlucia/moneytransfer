@@ -1,7 +1,6 @@
 package com.revolut.moneytransfer.adapter;
 
 import com.revolut.moneytransfer.domain.model.AccountTransfer;
-import com.revolut.moneytransfer.domain.model.AccountTransferRequest;
 import com.revolut.moneytransfer.domain.repository.IdGenerator;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

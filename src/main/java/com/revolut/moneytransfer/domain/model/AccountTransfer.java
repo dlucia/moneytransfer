@@ -44,7 +44,6 @@ public class AccountTransfer
 
   @Override public int hashCode()
   {
-
     return Objects.hash(customerId, from, to, amount, exchangeRate, note);
   }
 }

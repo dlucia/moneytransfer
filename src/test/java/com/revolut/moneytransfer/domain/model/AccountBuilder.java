@@ -9,9 +9,7 @@ public class AccountBuilder
   private String name = "EUR";
   private MonetaryAmount amount = Money.of(1, "EUR");
 
-  private AccountBuilder()
-  {
-  }
+  private AccountBuilder() {}
 
   public static AccountBuilder anAccount()
   {

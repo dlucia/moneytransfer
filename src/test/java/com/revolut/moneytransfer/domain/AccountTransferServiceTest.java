@@ -9,7 +9,6 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.*;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
