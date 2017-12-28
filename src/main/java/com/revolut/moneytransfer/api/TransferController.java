@@ -1,7 +1,6 @@
 package com.revolut.moneytransfer.api;
 
-import com.revolut.moneytransfer.adapter.InMemoryCustomerAccountRepository;
-import com.revolut.moneytransfer.adapter.InMemoryExchangeRateRepository;
+import com.revolut.moneytransfer.adapter.*;
 import com.revolut.moneytransfer.api.converter.TransferRequestConverter;
 import com.revolut.moneytransfer.domain.AccountTransferService;
 import com.revolut.moneytransfer.domain.model.*;
@@ -38,7 +37,7 @@ public class TransferController
         new InMemoryExchangeRateRepository(new HashMap<String, CurrencyRate>()
         {{
           put("EUR-GBP", new CurrencyRate(new BigDecimal("0.89")));
-        }}))
+        }}), new InMemoryTransferRepository(new UUIDIdGenerator(), new HashMap<>()))
         .execute(request);
 
     return accepted().build();

@@ -1,20 +1,22 @@
 package com.revolut.moneytransfer.domain;
 
 import com.revolut.moneytransfer.domain.model.*;
-import com.revolut.moneytransfer.domain.repository.CustomerAccountRepository;
-import com.revolut.moneytransfer.domain.repository.ExchangeRateRepository;
+import com.revolut.moneytransfer.domain.repository.*;
 
 public class AccountTransferService
 {
 
   private final CustomerAccountRepository customerAccountRepository;
   private final ExchangeRateRepository exchangeRateRepository;
+  private final TransferRepository transferRepository;
 
   public AccountTransferService(CustomerAccountRepository customerAccountRepository,
-                                ExchangeRateRepository exchangeRateRepository)
+                                ExchangeRateRepository exchangeRateRepository,
+                                TransferRepository transferRepository)
   {
     this.customerAccountRepository = customerAccountRepository;
     this.exchangeRateRepository = exchangeRateRepository;
+    this.transferRepository = transferRepository;
   }
 
   public void execute(AccountTransferRequest transfer)
@@ -28,5 +30,7 @@ public class AccountTransferService
 
     customerAccountRepository.updateAccount(transfer.customerId(), from);
     customerAccountRepository.updateAccount(transfer.customerId(), to);
+
+    transferRepository.save(transfer);
   }
 }

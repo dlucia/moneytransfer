@@ -1,8 +1,7 @@
 package com.revolut.moneytransfer.domain;
 
 import com.revolut.moneytransfer.domain.model.*;
-import com.revolut.moneytransfer.domain.repository.CustomerAccountRepository;
-import com.revolut.moneytransfer.domain.repository.ExchangeRateRepository;
+import com.revolut.moneytransfer.domain.repository.*;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -27,6 +26,8 @@ public class AccountTransferServiceTest
   private CustomerAccountRepository customerAccountRepository;
   @Mock
   private ExchangeRateRepository exchangeRateRepository;
+  @Mock
+  private TransferRepository transferRepository;
 
   private AccountTransferService transferService;
 
@@ -34,7 +35,8 @@ public class AccountTransferServiceTest
   public void setUp()
   {
     transferService = new AccountTransferService(customerAccountRepository,
-                                                 exchangeRateRepository);
+                                                 exchangeRateRepository,
+                                                 transferRepository);
   }
 
   @Test
@@ -52,8 +54,12 @@ public class AccountTransferServiceTest
       allowing(exchangeRateRepository).rateFor(EUR_ACCOUNT.currency(), CHF_ACCOUNT.currency());
       will(returnValue(EUR_CHF_RATE));
 
-      oneOf(customerAccountRepository).updateAccount(CUSTOMER_ID, new Account("EUR", new BigDecimal("9"), Currency.getInstance("EUR")));
-      oneOf(customerAccountRepository).updateAccount(CUSTOMER_ID, new Account("CHF", new BigDecimal("2.5"), Currency.getInstance("CHF")));
+      oneOf(customerAccountRepository)
+          .updateAccount(CUSTOMER_ID, new Account("EUR", new BigDecimal("9"), Currency.getInstance("EUR")));
+      oneOf(customerAccountRepository)
+          .updateAccount(CUSTOMER_ID, new Account("CHF", new BigDecimal("2.5"), Currency.getInstance("CHF")));
+
+      oneOf(transferRepository).save(transferRequest);
     }});
 
     transferService.execute(transferRequest);
