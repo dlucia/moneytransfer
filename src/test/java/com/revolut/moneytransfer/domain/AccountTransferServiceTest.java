@@ -12,11 +12,12 @@ import java.util.Currency;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
+import static org.javamoney.moneta.Money.of;
 
 public class AccountTransferServiceTest
 {
-  private static final Account EUR_ACCOUNT = new Account("EUR", TEN, Currency.getInstance("EUR"));
-  private static final Account CHF_ACCOUNT = new Account("CHF", ONE, Currency.getInstance("CHF"));
+  private static final Account EUR_ACCOUNT = new Account("EUR", of(TEN, "EUR"));
+  private static final Account CHF_ACCOUNT = new Account("CHF", of(ONE, "CHF"));
   private static final CurrencyRate EUR_CHF_RATE = new CurrencyRate(new BigDecimal("1.5"));
   private static final String CUSTOMER_ID = "aaa";
 
@@ -54,10 +55,10 @@ public class AccountTransferServiceTest
       allowing(exchangeRateRepository).rateFor(EUR_ACCOUNT.currency(), CHF_ACCOUNT.currency());
       will(returnValue(EUR_CHF_RATE));
 
-      oneOf(customerAccountRepository)
-          .updateAccount(CUSTOMER_ID, new Account("EUR", new BigDecimal("9"), Currency.getInstance("EUR")));
-      oneOf(customerAccountRepository)
-          .updateAccount(CUSTOMER_ID, new Account("CHF", new BigDecimal("2.5"), Currency.getInstance("CHF")));
+      oneOf(customerAccountRepository).updateAccount(CUSTOMER_ID,
+                                                     new Account("EUR", of(new BigDecimal("9"), "EUR")));
+      oneOf(customerAccountRepository).updateAccount(CUSTOMER_ID,
+                                                     new Account("CHF", of(new BigDecimal("2.5"), "CHF")));
 
       oneOf(transferRepository).save(transferRequest);
     }});

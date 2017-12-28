@@ -9,18 +9,16 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.ZERO;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.javamoney.moneta.Money.of;
 import static org.junit.Assert.assertThat;
 
 public class InMemoryCustomerAccountRepositoryTest
 {
-  private static final Account EUR_ACCOUNT = new Account("EUR",
-                                                         new BigDecimal("14.15"),
-                                                         Currency.getInstance("EUR"));
-  private static final Account CHF_ACCOUNT = new Account("CHF", ONE, Currency.getInstance("CHF"));
-  private static final Account NOT_EXISTENT_ACCOUNT = new Account("XXX", ZERO, null);
+  private static final Account EUR_ACCOUNT = new Account("EUR", of(new BigDecimal("14.15"), "EUR"));
+  private static final Account CHF_ACCOUNT = new Account("CHF", of(ONE, "CHF"));
+  private static final Account NOT_EXISTENT_ACCOUNT = new Account("XXX", of(ONE, "CHF"));
 
   private InMemoryCustomerAccountRepository repository;
   private Map<String, List<Account>> storage;

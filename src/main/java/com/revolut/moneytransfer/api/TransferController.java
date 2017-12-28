@@ -4,6 +4,7 @@ import com.revolut.moneytransfer.adapter.*;
 import com.revolut.moneytransfer.api.converter.TransferRequestConverter;
 import com.revolut.moneytransfer.domain.AccountTransferService;
 import com.revolut.moneytransfer.domain.model.*;
+import org.javamoney.moneta.Money;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -29,15 +30,20 @@ public class TransferController
             {{
               put("customerId1", new ArrayList<Account>()
               {{
-                add(new Account("EUR", TEN, Currency.getInstance("EUR")));
-                add(new Account("GBP", ONE, Currency.getInstance("GBP")));
+                add(new Account("EUR", Money.of(TEN, "EUR")));
+                add(new Account("GBP", Money.of(ONE, "GBP")));
+              }});
+              put("customerId2", new ArrayList<Account>()
+              {{
+                add(new Account("GBP", Money.of(ONE, "GBP")));
               }});
             }}
         ),
         new InMemoryExchangeRateRepository(new HashMap<String, CurrencyRate>()
         {{
           put("EUR-GBP", new CurrencyRate(new BigDecimal("0.89")));
-        }}), new InMemoryTransferRepository(new UUIDIdGenerator(), new HashMap<>()))
+        }}),
+        new InMemoryTransferRepository(new UUIDIdGenerator(), new HashMap<>()))
         .execute(request);
 
     return accepted().build();

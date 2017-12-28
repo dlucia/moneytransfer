@@ -25,6 +25,7 @@ public class AccountTransferService
     Account to = customerAccountRepository.lookup(transfer.customerId(), transfer.to());
 
     CurrencyRate currencyRate = exchangeRateRepository.rateFor(from.currency(), to.currency());
+
     from.reduceBalanceOf(transfer.amount());
     to.increaseBalanceOf(transfer.amount().multiply(currencyRate.value()));
 
