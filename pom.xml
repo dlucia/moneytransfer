@@ -11,11 +11,11 @@
 
     <properties>
         <jersey.version>2.26</jersey.version>
+        <moneta.version>1.1</moneta.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.12</junit.version>
         <jmock.version>2.8.2</jmock.version>
-        <moneta.version>1.1</moneta.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.version>1.7.25</slf4j.version>
     </properties>
 
     <dependencyManagement>
