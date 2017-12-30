@@ -5,7 +5,7 @@
 
 From the root folder:
 ```
-mvn exec:java
+mvn compile exec:java
 ```
 
 It runs an http server which listen on uri http://localhost:8080/api
@@ -19,7 +19,7 @@ Response codes:
 * 404 =\> If customer is not found with an error message
 * 404 =\> If account is not found with an error message
 * 400 =\> If insufficient balance for the account from which have the transfer with an error message
-* 500 =\> If amount is not valid with an error message
+* 400 =\> If amount is not valid (negative) with an error message
 * 500 =\> If any exception occur with an error message
 
 Body:

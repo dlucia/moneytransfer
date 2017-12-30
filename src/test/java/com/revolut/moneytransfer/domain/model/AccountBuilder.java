@@ -1,13 +1,13 @@
 package com.revolut.moneytransfer.domain.model;
 
-import org.javamoney.moneta.Money;
-
 import javax.money.MonetaryAmount;
+
+import static org.javamoney.moneta.Money.of;
 
 public class AccountBuilder
 {
   private String name = "EUR";
-  private MonetaryAmount amount = Money.of(1, "EUR");
+  private MonetaryAmount amount = of(1, "EUR");
 
   private AccountBuilder() {}
 
