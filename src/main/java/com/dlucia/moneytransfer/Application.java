@@ -22,6 +22,7 @@ import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 import static java.time.Instant.now;
 import static org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory.createHttpServer;
+import static org.javamoney.moneta.Money.*;
 
 public class Application
 {
@@ -38,7 +39,7 @@ public class Application
     return createHttpServer(URI.create(BASE_URI),
                             new ResourceConfig()
                                 .register(new Configuration())
-//                                .register(new InMemoryConfiguration())
+                                //                                .register(new InMemoryConfiguration())
                                 .packages(RESOURCE_PACKAGE));
   }
 
@@ -71,12 +72,12 @@ public class Application
               {{
                 put("customer1", new ArrayList<Account>()
                 {{
-                  add(new Account("EUR", Money.of(TEN, "EUR"), now()));
-                  add(new Account("GBP", Money.of(ONE, "GBP"), now()));
+                  add(new Account("EUR", of(TEN, "EUR"), now()));
+                  add(new Account("GBP", of(ONE, "GBP"), now()));
                 }});
                 put("customer2", new ArrayList<Account>()
                 {{
-                  add(new Account("GBP", Money.of(ONE, "GBP"), now()));
+                  add(new Account("CHF", of(new BigDecimal("3"), "CHF"), now()));
                 }});
               }}
           ),

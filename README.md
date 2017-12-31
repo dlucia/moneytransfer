@@ -22,6 +22,7 @@ Response codes:
 * 404 =\> If account is not found with an error message
 * 400 =\> If insufficient balance for the account from which have the transfer with an error message
 * 400 =\> If amount is not valid (negative) with an error message
+* 503 =\> If there is a concurrent update for an account with an error message
 * 500 =\> If any exception occur with an error message
 
 Body:
