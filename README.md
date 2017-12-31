@@ -10,7 +10,7 @@ But when I was finishing I had a doubt wrt an embedded database... I did not dec
 They are both working, and respect the repository contract tests. The composition is made in the main partition (Application.class)
 Now the InMemoryConfiguration is commented in favor of the JDBC one. It is only necessary to uncomment it and comment the other to make a switch. 
 3. *API Response body?* I did not decided if was the case to have in the response body the result of the transfer, or anything.
-I left empty, so the API behave as a command, without any response body.
+So I left it empty and the API behave as a command, without any response body.
 
     
 Finally, to handle money and currency I used **moneta** library, which handles all the operations on money.
