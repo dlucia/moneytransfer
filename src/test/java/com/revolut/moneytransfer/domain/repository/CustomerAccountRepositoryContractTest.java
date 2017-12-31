@@ -17,12 +17,12 @@ import static org.junit.Assert.assertThat;
 public abstract class CustomerAccountRepositoryContractTest
 {
   protected static final String CUSTOMER_ID = "cc1";
-  private static final Account EUR_ACCOUNT = new Account("EUR",
-                                                         of(new BigDecimal("14.15"), "EUR"),
-                                                         parse("2017-12-31T10:49:34.873Z"));
-  private static final Account GBP_ACCOUNT = new Account("GBP",
-                                                         of(ONE, "GBP"),
-                                                         parse("2017-12-13T09:40:34.873Z"));
+  protected static final Account EUR_ACCOUNT = new Account("EUR",
+                                                           of(new BigDecimal("14.15"), "EUR"),
+                                                           parse("2017-12-31T10:49:34.873Z"));
+  protected static final Account GBP_ACCOUNT = new Account("GBP",
+                                                           of(ONE, "GBP"),
+                                                           parse("2017-12-13T09:40:34.873Z"));
   private static final Account NOT_EXISTENT_ACCOUNT = anAccount().withName("XXX").build();
 
   @Test

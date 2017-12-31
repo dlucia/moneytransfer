@@ -9,6 +9,7 @@ import java.util.List;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 public abstract class TransferRepositoryContractTest
@@ -41,7 +42,7 @@ public abstract class TransferRepositoryContractTest
     repository().save(A_TRANSFER);
     repository().save(ANOTHER_TRANSFER);
 
-    assertThat(transactionsFor(CUSTOMER_ID), contains(A_TRANSFER, ANOTHER_TRANSFER));
+    assertThat(transactionsFor(CUSTOMER_ID), containsInAnyOrder(A_TRANSFER, ANOTHER_TRANSFER));
   }
 
   @Test(expected = DatabaseException.class)

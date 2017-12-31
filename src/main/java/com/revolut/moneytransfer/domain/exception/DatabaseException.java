@@ -12,4 +12,9 @@ public class DatabaseException extends TransferException
   {
     super(format("Trouble with database. %s", exception.getMessage()));
   }
+
+  public DatabaseException(String message)
+  {
+    super(message);
+  }
 }
