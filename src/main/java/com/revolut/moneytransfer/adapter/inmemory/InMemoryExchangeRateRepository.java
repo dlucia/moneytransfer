@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.adapter;
+package com.revolut.moneytransfer.adapter.inmemory;
 
 import com.revolut.moneytransfer.domain.exception.RateNotExistentException;
 import com.revolut.moneytransfer.domain.model.CurrencyRate;
