@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.util.*;
 
-import static com.dlucia.moneytransfer.DatabaseBuilder.aDatabase;
+import static com.dlucia.moneytransfer.DatabaseBuilder.anEmbeddedDatabase;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 import static java.time.Instant.now;
@@ -46,7 +46,7 @@ public class Application
   {
     @Override protected void configure()
     {
-      DataSource dataSource = aDatabase().withScript("database.sql").build();
+      DataSource dataSource = anEmbeddedDatabase().withScript("database.sql").build();
 
       Converter converter = new TransferRequestConverter();
       AccountTransferService transferService = new AccountTransferService(

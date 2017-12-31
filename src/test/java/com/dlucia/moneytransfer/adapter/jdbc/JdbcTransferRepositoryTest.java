@@ -18,7 +18,7 @@ public class JdbcTransferRepositoryTest extends TransferRepositoryContractTest
   @Before
   public void setUp()
   {
-    dataSource = TestDatabaseBuilder.aDatabase().withScript("test-database.sql").build();
+    dataSource = TestDatabaseBuilder.anEmbeddedDatabase().withScript("test-database.sql").build();
     repository = new JdbcTransferRepository(dataSource);
   }
 

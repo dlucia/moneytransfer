@@ -15,7 +15,7 @@ class DatabaseBuilder
 
   private DatabaseBuilder() {}
 
-  static DatabaseBuilder aDatabase()
+  static DatabaseBuilder anEmbeddedDatabase()
   {
     return new DatabaseBuilder();
   }

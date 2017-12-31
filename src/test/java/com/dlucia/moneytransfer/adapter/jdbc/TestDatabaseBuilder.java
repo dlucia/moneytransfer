@@ -15,7 +15,7 @@ class TestDatabaseBuilder
 
   private TestDatabaseBuilder() {}
 
-  static TestDatabaseBuilder aDatabase()
+  static TestDatabaseBuilder anEmbeddedDatabase()
   {
     return new TestDatabaseBuilder();
   }
