@@ -10,7 +10,6 @@ import com.dlucia.moneytransfer.domain.model.CurrencyRate;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.javamoney.moneta.Money;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -22,7 +21,7 @@ import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 import static java.time.Instant.now;
 import static org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory.createHttpServer;
-import static org.javamoney.moneta.Money.*;
+import static org.javamoney.moneta.Money.of;
 
 public class Application
 {
@@ -39,7 +38,7 @@ public class Application
     return createHttpServer(URI.create(BASE_URI),
                             new ResourceConfig()
                                 .register(new Configuration())
-                                //                                .register(new InMemoryConfiguration())
+                                // .register(new InMemoryConfiguration())
                                 .packages(RESOURCE_PACKAGE));
   }
 

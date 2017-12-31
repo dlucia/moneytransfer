@@ -1,12 +1,13 @@
 package com.dlucia.moneytransfer;
 
 import org.h2.jdbcx.JdbcDataSource;
-import org.h2.tools.RunScript;
 
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
+
+import static org.h2.tools.RunScript.execute;
 
 class DatabaseBuilder
 {
@@ -28,26 +29,24 @@ class DatabaseBuilder
   DataSource build()
   {
     DataSource dataSource = dataSource();
-    createDatabase(dataSource);
+    try
+    {
+      createDatabase(dataSource);
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException("Unable to create Database. " + e.getMessage());
+    }
 
     return dataSource;
   }
 
-  private void createDatabase(DataSource dataSource)
+  private void createDatabase(DataSource dataSource) throws Exception
   {
-    try
+    File file = new File("src/main/resource/" + script);
+    try (Connection connection = dataSource.getConnection())
     {
-      File file = new File("src/main/resource/" + script);
-      String absolutePath = file.getAbsolutePath();
-      Connection connection = dataSource.getConnection();
-      RunScript.execute(connection, new FileReader(absolutePath));
-
-      connection.close();
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-      throw new RuntimeException("Unable to create Database. " + e.getMessage());
+      execute(connection, new FileReader(file));
     }
   }
 
