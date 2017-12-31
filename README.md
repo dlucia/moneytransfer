@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/dlucia/moneytransfer.svg?branch=master)](https://travis-ci.org/dlucia/moneytransfer)
 # Money Transfer
 
-#####Assumptions / Design decision
+##### Assumptions / Design decision
 1. *What is an account?*  
 The first idea that came into my mind was to make a transfer (payment) between to different people,
 but than reading more the assignment I realized that accounts in Revolut domain have a specific meaning, 
