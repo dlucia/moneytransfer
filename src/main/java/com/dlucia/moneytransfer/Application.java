@@ -38,7 +38,7 @@ public class Application
     return createHttpServer(URI.create(BASE_URI),
                             new ResourceConfig()
                                 .register(new Configuration())
-                                //.register(new InMemoryConfiguration())
+//                                .register(new InMemoryConfiguration())
                                 .packages(RESOURCE_PACKAGE));
   }
 
@@ -70,12 +70,12 @@ public class Application
           new InMemoryCustomerAccountRepository(
               new HashMap<String, List<Account>>()
               {{
-                put("customerId1", new ArrayList<Account>()
+                put("customer1", new ArrayList<Account>()
                 {{
                   add(new Account("EUR", Money.of(TEN, "EUR"), now()));
                   add(new Account("GBP", Money.of(ONE, "GBP"), now()));
                 }});
-                put("customerId2", new ArrayList<Account>()
+                put("customer2", new ArrayList<Account>()
                 {{
                   add(new Account("GBP", Money.of(ONE, "GBP"), now()));
                 }});
