@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import static com.dlucia.moneytransfer.domain.model.AccountBuilder.anAccount;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
-import static java.time.Instant.now;
 import static org.javamoney.moneta.Money.of;
 
 public class AccountTransferServiceTest
@@ -69,11 +68,13 @@ public class AccountTransferServiceTest
       oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
                                                                anAccount()
                                                                    .withName("EUR")
-                                                                   .withBalance(of(new BigDecimal("9"), "EUR"))
+                                                                   .withBalance(of(new BigDecimal("9"),
+                                                                                   "EUR"))
                                                                    .build(),
                                                                anAccount()
                                                                    .withName("CHF")
-                                                                   .withBalance(of(new BigDecimal("2.5"), "CHF"))
+                                                                   .withBalance(of(new BigDecimal("2.5"),
+                                                                                   "CHF"))
                                                                    .build());
 
       oneOf(transferRepository).save(new AccountTransfer(CUSTOMER_ID,
@@ -131,11 +132,13 @@ public class AccountTransferServiceTest
       oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
                                                                anAccount()
                                                                    .withName("EUR")
-                                                                   .withBalance(of(new BigDecimal("2"), "EUR"))
+                                                                   .withBalance(of(new BigDecimal("2"),
+                                                                                   "EUR"))
                                                                    .build(),
                                                                anAccount()
                                                                    .withName("CHF")
-                                                                   .withBalance(of(new BigDecimal("13"), "CHF"))
+                                                                   .withBalance(of(new BigDecimal("13"),
+                                                                                   "CHF"))
                                                                    .build());
 
       will(throwException(new ConcurrentAccountUpdateException("")));

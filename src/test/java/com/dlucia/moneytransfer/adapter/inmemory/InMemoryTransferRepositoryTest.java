@@ -3,9 +3,7 @@ package com.dlucia.moneytransfer.adapter.inmemory;
 import com.dlucia.moneytransfer.domain.model.AccountTransfer;
 import com.dlucia.moneytransfer.domain.repository.TransferRepository;
 import com.dlucia.moneytransfer.domain.repository.TransferRepositoryContractTest;
-import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
-import org.junit.Rule;
 
 import java.util.*;
 
@@ -13,9 +11,6 @@ import static java.util.stream.Collectors.toList;
 
 public class InMemoryTransferRepositoryTest extends TransferRepositoryContractTest
 {
-  @Rule
-  public JUnitRuleMockery context = new JUnitRuleMockery();
-
   private InMemoryTransferRepository repository;
   private Map<String, AccountTransfer> storage;
 
