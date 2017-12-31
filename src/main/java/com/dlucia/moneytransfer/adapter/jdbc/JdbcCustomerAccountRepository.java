@@ -93,11 +93,11 @@ public class JdbcCustomerAccountRepository implements CustomerAccountRepository
     }
   }
 
-  private void checkForConcurrentUpdateOn(String customerId, Account account)
+  private void checkForConcurrentUpdateOn(String customerId, Account toStore)
   {
-    Account from = lookup(customerId, account.name());
-    if (from.lastUpdateInstant().isAfter(account.lastUpdateInstant()))
-      throw new ConcurrentAccountUpdateException(from.name());
+    Account stored = lookup(customerId, toStore.name());
+    if (stored.lastUpdateInstant().isAfter(toStore.lastUpdateInstant()))
+      throw new ConcurrentAccountUpdateException(stored.name());
   }
 
   private void updateAccount(String customerId, Account account, Connection connection) throws SQLException

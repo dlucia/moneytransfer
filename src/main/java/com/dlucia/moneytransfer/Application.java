@@ -44,7 +44,6 @@ public class Application
 
   static class Configuration extends AbstractBinder
   {
-
     @Override protected void configure()
     {
       DataSource dataSource = aDatabase().withScript("database.sql").build();
