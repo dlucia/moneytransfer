@@ -14,7 +14,6 @@ import static com.revolut.moneytransfer.adapter.jdbc.TestDatabaseBuilder.aDataba
 
 public class JdbcTransferRepositoryTest extends TransferRepositoryContractTest
 {
-
   private TransferRepository repository;
   private DataSource dataSource;
 
@@ -30,7 +29,7 @@ public class JdbcTransferRepositoryTest extends TransferRepositoryContractTest
     return repository;
   }
 
-  protected List<AccountTransfer> transactionsFor(String customerId) throws Exception
+  @Override protected List<AccountTransfer> transactionsFor(String customerId) throws Exception
   {
     try (Connection connection = dataSource.getConnection())
     {
