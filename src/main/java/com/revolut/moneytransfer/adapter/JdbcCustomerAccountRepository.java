@@ -26,11 +26,11 @@ public class JdbcCustomerAccountRepository implements CustomerAccountRepository
   @Override public Account lookup(String customerId, String account)
   {
     Connection connection = null;
-    PreparedStatement statement = null;
     try
     {
       connection = dataSource.getConnection();
-      statement = connection.prepareStatement("SELECT * FROM ACCOUNT WHERE CUSTOMER_ID=? AND NAME=?");
+      PreparedStatement statement = connection
+          .prepareStatement("SELECT * FROM ACCOUNT WHERE CUSTOMER_ID=? AND NAME=?");
       statement.setString(1, customerId);
       statement.setString(2, account);
       ResultSet resultSet = statement.executeQuery();
@@ -43,11 +43,11 @@ public class JdbcCustomerAccountRepository implements CustomerAccountRepository
     }
     catch (SQLException e)
     {
-      throw new DatabaseException("");
+      throw new DatabaseException(e);
     }
     finally
     {
-      closeConnection(connection, statement);
+      closeConnection(connection);
     }
   }
 
@@ -68,12 +68,11 @@ public class JdbcCustomerAccountRepository implements CustomerAccountRepository
 
   @Override public void updateAccountBalanceFor(String customerId, Account account)
   {
-    PreparedStatement statement = null;
     Connection connection = null;
     try
     {
       connection = dataSource.getConnection();
-      statement = connection
+      PreparedStatement statement = connection
           .prepareStatement("UPDATE ACCOUNT SET BALANCE=?, LAST_UPDATE=? WHERE CUSTOMER_ID=? AND NAME=?");
       statement.setString(1, account.balance().getNumber().toString());
       statement.setTimestamp(2, new Timestamp(now().toEpochMilli()));
@@ -87,24 +86,20 @@ public class JdbcCustomerAccountRepository implements CustomerAccountRepository
     }
     catch (SQLException e)
     {
-      throw new DatabaseException("");
+      throw new DatabaseException(e);
     }
     finally
     {
-      closeConnection(connection, statement);
+      closeConnection(connection);
     }
   }
 
-  private void closeConnection(Connection connection, Statement statement)
+  private void closeConnection(Connection connection)
   {
     try
     {
-      statement.close();
       connection.close();
     }
-    catch (SQLException ignored)
-    {
-      throw new DatabaseException("");
-    }
+    catch (SQLException ignored) {}
   }
 }

@@ -27,6 +27,36 @@ public class AccountTransfer
     this.note = note;
   }
 
+  public String customerId()
+  {
+    return customerId;
+  }
+
+  public String from()
+  {
+    return from;
+  }
+
+  public String to()
+  {
+    return to;
+  }
+
+  public BigDecimal amount()
+  {
+    return amount;
+  }
+
+  public BigDecimal exchangeRate()
+  {
+    return exchangeRate;
+  }
+
+  public String note()
+  {
+    return note;
+  }
+
   @Override public boolean equals(Object o)
   {
     if (this == o)
@@ -45,5 +75,17 @@ public class AccountTransfer
   @Override public int hashCode()
   {
     return Objects.hash(customerId, from, to, amount, exchangeRate, note);
+  }
+
+  @Override public String toString()
+  {
+    return "AccountTransfer{" +
+        "customerId='" + customerId + '\'' +
+        ", from='" + from + '\'' +
+        ", to='" + to + '\'' +
+        ", amount=" + amount +
+        ", exchangeRate=" + exchangeRate +
+        ", note='" + note + '\'' +
+        '}';
   }
 }

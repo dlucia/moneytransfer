@@ -50,7 +50,7 @@ public class Application
                 put("GBP-EUR", new CurrencyRate(new BigDecimal("1.13")));
               }}
           ),
-          new InMemoryTransferRepository(new UUIDIdGenerator(), new HashMap<>())
+          new JdbcTransferRepository(dataSource)
       );
 
       bind(transferService).to(AccountTransferService.class);
