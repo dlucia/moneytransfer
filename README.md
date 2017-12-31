@@ -1,7 +1,21 @@
 [![Build Status](https://travis-ci.org/dlucia/moneytransfer.svg?branch=master)](https://travis-ci.org/dlucia/moneytransfer)
 # Money Transfer
 
-Some assumptions
+#####Some assumptions I made
+1. *What is an account?* The first idea that came in my mind was to make a transfer (payment) between to different people,
+but than reading more the assignment I realized that accounts in Revolut domain have a specific meaning, 
+so I implemented the use case considering Revolut accounts (which are 1to1 to a currency)
+2. *What storage use?* I started using implementation Map based, since the assignment requires to use in memory implementation.
+But when I was finishing I had a doubt wrt an embedded database... I did not decided so I left both the implementation.
+They are both working, and respect the repository contract tests. The composition is made in the main partition (Application.class)
+Now the InMemoryConfiguration is commented in favor of the JDBC one. It is only necessary to uncomment it and comment the other to make a switch. 
+3. *API Response body?* I did not decided if was the case to have in the response body the result of the transfer, or anything.
+I left empty, so the API behave as a command, without any response body.
+
+    
+Finally, to handle money and currency I used **moneta** library, which handles all the operations on money.
+It handles very efficiently the rounding, which is a difficult matter since different currency have different decimal policy 
+(i.e EUR is like this ##.##€, whilst JPY is without decimals ##¥)
 
 # How to run
 
@@ -15,7 +29,7 @@ It runs an http server which listen on uri http://localhost:8080/api
 # Endpoint
 
 ### POST /v1/transfers
-Create a new transfer between accounts for a customer. The response body contains the balance for the accounts after the transfer.
+Create a new transfer between accounts for a customer.
 Response codes:
 * 202 =\> Transfer accepted
 * 404 =\> If customer is not found with an error message
