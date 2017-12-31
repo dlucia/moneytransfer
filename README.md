@@ -2,14 +2,15 @@
 # Money Transfer
 
 #####Some assumptions I made
-1. *What is an account?* The first idea that came in my mind was to make a transfer (payment) between to different people,
+1. *What is an account?* The first idea that came into my mind was to make a transfer (payment) between to different people,
 but than reading more the assignment I realized that accounts in Revolut domain have a specific meaning, 
 so I implemented the use case considering Revolut accounts (which are 1to1 to a currency)
-2. *What storage use?* I started using implementation Map based, since the assignment requires to use in memory implementation.
-But when I was finishing I had a doubt wrt an embedded database... I did not decided so I left both the implementation.
-They are both working, and respect the repository contract tests. The composition is made in the main partition (Application.class)
-Now the InMemoryConfiguration is commented in favor of the JDBC one. It is only necessary to uncomment it and comment the other to make a switch. 
-3. *API Response body?* I did not decided if was the case to have in the response body the result of the transfer, or anything.
+2. *What storage to use?* I started using implementation Map based, since the assignment requires to use an in memory implementation.
+But when I was finishing I had a doubt w/ an embedded database... I did not decided so I left both the implementation.
+They are both working, and respect the repository contract tests. The composition is made in the main partition (Application.class).
+Now the InMemoryConfiguration is commented in favor of the JDBC one. 
+It is only necessary to uncomment it and comment the other to make a switch, if you like. 
+3. *API Response body?* I did not decided if it was the case to have in the response body the result of the transfer, or anything.
 So I left it empty and the API behave as a command, without any response body.
 
     
