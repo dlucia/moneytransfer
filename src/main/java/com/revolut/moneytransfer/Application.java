@@ -1,6 +1,8 @@
 package com.revolut.moneytransfer;
 
 import com.revolut.moneytransfer.adapter.*;
+import com.revolut.moneytransfer.adapter.jdbc.JdbcCustomerAccountRepository;
+import com.revolut.moneytransfer.adapter.jdbc.JdbcTransferRepository;
 import com.revolut.moneytransfer.api.converter.Converter;
 import com.revolut.moneytransfer.api.converter.TransferRequestConverter;
 import com.revolut.moneytransfer.domain.AccountTransferService;

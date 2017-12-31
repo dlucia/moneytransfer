@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.adapter;
+package com.revolut.moneytransfer.adapter.jdbc;
 
 import org.h2.jdbcx.JdbcDataSource;
 import org.h2.tools.RunScript;

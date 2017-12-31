@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.adapter;
+package com.revolut.moneytransfer.adapter.jdbc;
 
 import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
 import com.revolut.moneytransfer.domain.exception.ConcurrentAccountUpdateException;
@@ -9,7 +9,7 @@ import org.junit.*;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 
-import static com.revolut.moneytransfer.adapter.TestDatabaseBuilder.aDatabase;
+import static com.revolut.moneytransfer.adapter.jdbc.TestDatabaseBuilder.aDatabase;
 import static com.revolut.moneytransfer.domain.model.AccountBuilder.anAccount;
 import static java.time.Instant.parse;
 import static org.hamcrest.CoreMatchers.is;

@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.adapter;
+package com.revolut.moneytransfer.adapter.jdbc;
 
 import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
 import com.revolut.moneytransfer.domain.exception.DatabaseException;

@@ -1,4 +1,4 @@
-package com.revolut.moneytransfer.adapter;
+package com.revolut.moneytransfer.adapter.jdbc;
 
 import com.revolut.moneytransfer.domain.exception.DatabaseException;
 import com.revolut.moneytransfer.domain.model.AccountTransfer;
@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.revolut.moneytransfer.adapter.TestDatabaseBuilder.aDatabase;
+import static com.revolut.moneytransfer.adapter.jdbc.TestDatabaseBuilder.aDatabase;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 import static org.hamcrest.Matchers.contains;
