@@ -27,7 +27,7 @@ Response codes:
 Body:
 ```
 {
-	"customerId": "customerId1",
+	"customerId": "customer1",
 	"accountFrom":"EUR",
 	"accountTo":"GBP",
 	"amount":"8",

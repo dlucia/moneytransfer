@@ -11,6 +11,7 @@ import org.junit.*;
 
 import java.math.BigDecimal;
 
+import static com.dlucia.moneytransfer.domain.model.AccountBuilder.anAccount;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
 import static java.time.Instant.now;
@@ -37,8 +38,14 @@ public class AccountTransferServiceTest
   @Before
   public void setUp()
   {
-    eurAccount = new Account("EUR", of(TEN, "EUR"), now());
-    chfAccount = new Account("CHF", of(ONE, "CHF"), now());
+    eurAccount = anAccount()
+        .withName("EUR")
+        .withBalance(of(TEN, "EUR"))
+        .build();
+    chfAccount = anAccount()
+        .withName("CHF")
+        .withBalance(of(ONE, "CHF"))
+        .build();
     transferService = new AccountTransferService(customerAccountRepository,
                                                  exchangeRateRepository,
                                                  transferRepository);
@@ -60,12 +67,14 @@ public class AccountTransferServiceTest
       will(returnValue(EUR_CHF_RATE));
 
       oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
-                                                               new Account("EUR",
-                                                                           of(new BigDecimal("9"), "EUR"),
-                                                                           now()),
-                                                               new Account("CHF",
-                                                                           of(new BigDecimal("2.5"), "CHF"),
-                                                                           now()));
+                                                               anAccount()
+                                                                   .withName("EUR")
+                                                                   .withBalance(of(new BigDecimal("9"), "EUR"))
+                                                                   .build(),
+                                                               anAccount()
+                                                                   .withName("CHF")
+                                                                   .withBalance(of(new BigDecimal("2.5"), "CHF"))
+                                                                   .build());
 
       oneOf(transferRepository).save(new AccountTransfer(CUSTOMER_ID,
                                                          transferRequest.from(),
@@ -120,12 +129,15 @@ public class AccountTransferServiceTest
       will(returnValue(EUR_CHF_RATE));
 
       oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
-                                                               new Account("EUR",
-                                                                           of(new BigDecimal("2"), "EUR"),
-                                                                           now()),
-                                                               new Account("CHF",
-                                                                           of(new BigDecimal("13"), "CHF"),
-                                                                           now()));
+                                                               anAccount()
+                                                                   .withName("EUR")
+                                                                   .withBalance(of(new BigDecimal("2"), "EUR"))
+                                                                   .build(),
+                                                               anAccount()
+                                                                   .withName("CHF")
+                                                                   .withBalance(of(new BigDecimal("13"), "CHF"))
+                                                                   .build());
+
       will(throwException(new ConcurrentAccountUpdateException("")));
     }});
 

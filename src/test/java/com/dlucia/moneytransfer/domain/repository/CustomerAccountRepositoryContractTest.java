@@ -3,11 +3,11 @@ package com.dlucia.moneytransfer.domain.repository;
 import com.dlucia.moneytransfer.domain.exception.AccountNotFoundException;
 import com.dlucia.moneytransfer.domain.exception.ConcurrentAccountUpdateException;
 import com.dlucia.moneytransfer.domain.model.Account;
-import com.dlucia.moneytransfer.domain.model.AccountBuilder;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 
+import static com.dlucia.moneytransfer.domain.model.AccountBuilder.anAccount;
 import static java.math.BigDecimal.ONE;
 import static java.time.Instant.parse;
 import static org.hamcrest.CoreMatchers.is;
@@ -17,13 +17,19 @@ import static org.junit.Assert.assertThat;
 public abstract class CustomerAccountRepositoryContractTest
 {
   protected static final String CUSTOMER_ID = "cc1";
-  protected static final Account EUR_ACCOUNT = new Account("EUR",
-                                                           of(new BigDecimal("14.15"), "EUR"),
-                                                           parse("2017-12-31T10:49:34.873Z"));
-  protected static final Account GBP_ACCOUNT = new Account("GBP",
-                                                           of(ONE, "GBP"),
-                                                           parse("2017-12-13T09:40:34.873Z"));
-  private static final Account NOT_EXISTENT_ACCOUNT = AccountBuilder.anAccount().withName("XXX").build();
+  protected static final Account EUR_ACCOUNT =
+      anAccount()
+          .withName("EUR")
+          .withBalance(of(new BigDecimal("14.15"), "EUR"))
+          .withLastUpdateInstant(parse("2017-12-31T10:49:34.873Z"))
+          .build();
+  protected static final Account GBP_ACCOUNT =
+      anAccount()
+          .withName("GBP")
+          .withBalance(of(ONE, "GBP"))
+          .withLastUpdateInstant(parse("2017-12-13T09:40:34.873Z"))
+          .build();
+  private static final Account NOT_EXISTENT_ACCOUNT = anAccount().withName("XXX").build();
 
   @Test
   public void found()
@@ -40,12 +46,18 @@ public abstract class CustomerAccountRepositoryContractTest
   @Test
   public void balanceAccountUpdate()
   {
-    Account eurUpdatedAccount = new Account(EUR_ACCOUNT.name(),
-                                            of(new BigDecimal("4.55"), EUR_ACCOUNT.name()),
-                                            EUR_ACCOUNT.lastUpdateInstant());
-    Account gbpUpdatedAccount = new Account(GBP_ACCOUNT.name(),
-                                            of(new BigDecimal("0.55"), GBP_ACCOUNT.name()),
-                                            EUR_ACCOUNT.lastUpdateInstant());
+    Account eurUpdatedAccount =
+        anAccount()
+            .withName("EUR")
+            .withBalance(of(new BigDecimal("4.55"), "EUR"))
+            .withLastUpdateInstant(parse("2017-12-31T10:49:34.873Z"))
+            .build();
+    Account gbpUpdatedAccount =
+        anAccount()
+            .withName("GBP")
+            .withBalance(of(new BigDecimal("0.55"), "GBP"))
+            .withLastUpdateInstant(parse("2017-12-13T09:40:34.873Z"))
+            .build();
 
     repository().updateAccountBalanceFor(CUSTOMER_ID, eurUpdatedAccount, gbpUpdatedAccount);
 
@@ -61,12 +73,18 @@ public abstract class CustomerAccountRepositoryContractTest
   @Test(expected = ConcurrentAccountUpdateException.class)
   public void concurrentBalanceAccountsUpdate() throws Exception
   {
-    Account eurUpdatedAccount = new Account(EUR_ACCOUNT.name(),
-                                            of(new BigDecimal("4.55"), EUR_ACCOUNT.name()),
-                                            EUR_ACCOUNT.lastUpdateInstant());
-    Account gbpUpdatedAccount = new Account(GBP_ACCOUNT.name(),
-                                            of(new BigDecimal("0.55"), GBP_ACCOUNT.name()),
-                                            GBP_ACCOUNT.lastUpdateInstant());
+    Account eurUpdatedAccount =
+        anAccount()
+            .withName("EUR")
+            .withBalance(of(new BigDecimal("4.55"), "EUR"))
+            .withLastUpdateInstant(parse("2017-12-31T10:49:34.873Z"))
+            .build();
+    Account gbpUpdatedAccount =
+        anAccount()
+            .withName("GBP")
+            .withBalance(of(new BigDecimal("0.55"), "GBP"))
+            .withLastUpdateInstant(parse("2017-12-13T09:40:34.873Z"))
+            .build();
 
     simulateAConcurrentUpdateFor(EUR_ACCOUNT);
     repository().updateAccountBalanceFor(CUSTOMER_ID, eurUpdatedAccount, gbpUpdatedAccount);
@@ -75,12 +93,18 @@ public abstract class CustomerAccountRepositoryContractTest
   @Test
   public void concurrentBalanceAccountsUpdateDoesNotModifyStorage() throws Exception
   {
-    Account eurUpdatedAccount = new Account(EUR_ACCOUNT.name(),
-                                            of(new BigDecimal("4.55"), EUR_ACCOUNT.name()),
-                                            EUR_ACCOUNT.lastUpdateInstant());
-    Account gbpUpdatedAccount = new Account(GBP_ACCOUNT.name(),
-                                            of(new BigDecimal("0.55"), GBP_ACCOUNT.name()),
-                                            GBP_ACCOUNT.lastUpdateInstant());
+    Account eurUpdatedAccount =
+        anAccount()
+            .withName("EUR")
+            .withBalance(of(new BigDecimal("4.55"), "EUR"))
+            .withLastUpdateInstant(parse("2017-12-31T10:49:34.873Z"))
+            .build();
+    Account gbpUpdatedAccount =
+        anAccount()
+            .withName("GBP")
+            .withBalance(of(new BigDecimal("0.55"), "GBP"))
+            .withLastUpdateInstant(parse("2017-12-13T09:40:34.873Z"))
+            .build();
 
     simulateAConcurrentUpdateFor(GBP_ACCOUNT);
     try
