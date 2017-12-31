@@ -103,7 +103,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.revolut.moneytransfer.Application</mainClass>
+                    <mainClass>com.dlucia.moneytransfer.Application</mainClass>
                 </configuration>
             </plugin>
         </plugins>
