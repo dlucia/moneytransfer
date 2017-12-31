@@ -6,5 +6,5 @@ public interface CustomerAccountRepository
 {
   Account lookup(String customerId, String account);
 
-  void updateAccount(String customerId, Account account);
+  void updateAccountBalanceFor(String customerId, Account account);
 }

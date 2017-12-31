@@ -41,26 +41,12 @@ public class TransferControllerTest
         target.path(TRANSFER_PATH)
             .request()
             .post(json(aTransferRequest()
-                           .withCustomerID("customerId1")
+                           .withCustomerID("customer1")
                            .withAccountFrom("EUR")
                            .withAccountTo("GBP")
                            .build()));
 
     assertThat(response.getStatus(), is(202));
-  }
-
-  @Test
-  public void customerNotFound()
-  {
-    Response response =
-        target.path(TRANSFER_PATH)
-            .request()
-            .post(json(aTransferRequest()
-                           .withCustomerID("notExistent")
-                           .build()));
-
-    assertThat(response.getStatus(), is(404));
-    assertThat(response.readEntity(String.class), is("Customer with id notExistent not found"));
   }
 
   @Test
@@ -70,7 +56,7 @@ public class TransferControllerTest
         target.path(TRANSFER_PATH)
             .request()
             .post(json(aTransferRequest()
-                           .withCustomerID("customerId1")
+                           .withCustomerID("customer1")
                            .withAccountFrom("notExistent")
                            .build()));
 
@@ -85,7 +71,7 @@ public class TransferControllerTest
         target.path(TRANSFER_PATH)
             .request()
             .post(json(aTransferRequest()
-                           .withCustomerID("customerId1")
+                           .withCustomerID("customer1")
                            .withAccountFrom("EUR")
                            .withAccountTo("GBP")
                            .withAmount("100")
@@ -102,7 +88,7 @@ public class TransferControllerTest
         target.path(TRANSFER_PATH)
             .request()
             .post(json(aTransferRequest()
-                           .withCustomerID("customerId1")
+                           .withCustomerID("customer1")
                            .withAccountFrom("EUR")
                            .withAccountTo("GBP")
                            .withAmount("-1")

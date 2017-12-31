@@ -4,19 +4,17 @@ import com.revolut.moneytransfer.adapter.*;
 import com.revolut.moneytransfer.api.converter.Converter;
 import com.revolut.moneytransfer.api.converter.TransferRequestConverter;
 import com.revolut.moneytransfer.domain.AccountTransferService;
-import com.revolut.moneytransfer.domain.model.Account;
 import com.revolut.moneytransfer.domain.model.CurrencyRate;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.javamoney.moneta.Money;
 
+import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
 
-import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.TEN;
+import static com.revolut.moneytransfer.DatabaseBuilder.aDatabase;
 import static org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory.createHttpServer;
 
 public class Application
@@ -41,22 +39,10 @@ public class Application
   {
     @Override protected void configure()
     {
+      DataSource dataSource = aDatabase().withScript("database.sql").build();
       Converter converter = new TransferRequestConverter();
       AccountTransferService transferService = new AccountTransferService(
-          new InMemoryCustomerAccountRepository(
-              new HashMap<String, List<Account>>()
-              {{
-                put("customerId1", new ArrayList<Account>()
-                {{
-                  add(new Account("EUR", Money.of(TEN, "EUR")));
-                  add(new Account("GBP", Money.of(ONE, "GBP")));
-                }});
-                put("customerId2", new ArrayList<Account>()
-                {{
-                  add(new Account("GBP", Money.of(ONE, "GBP")));
-                }});
-              }}
-          ),
+          new JdbcCustomerAccountRepository(dataSource),
           new InMemoryExchangeRateRepository(
               new HashMap<String, CurrencyRate>()
               {{

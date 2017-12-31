@@ -5,22 +5,26 @@ import com.revolut.moneytransfer.domain.exception.NegativeAmountException;
 
 import javax.money.*;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Objects;
 
+import static java.time.Instant.now;
 import static javax.money.Monetary.getRounding;
 import static org.javamoney.moneta.Money.of;
 
-public class Account
+public final class Account
 {
   private final String name;
   private final CurrencyUnit currency;
   private MonetaryAmount balance;
+  private Instant lastUpdateInstant;
 
-  public Account(String name, MonetaryAmount balance)
+  public Account(String name, MonetaryAmount balance, Instant lastUpdateInstant)
   {
     this.name = name;
     this.balance = balance;
     this.currency = balance.getCurrency();
+    this.lastUpdateInstant = lastUpdateInstant;
   }
 
   public String name()
@@ -37,6 +41,11 @@ public class Account
   {
     MonetaryOperator roundingOperator = getRounding(currency);
     return balance.with(roundingOperator);
+  }
+
+  public Instant lastUpdateInstant()
+  {
+    return lastUpdateInstant;
   }
 
   public void reduceBalanceOf(BigDecimal amount)
@@ -64,6 +73,11 @@ public class Account
       throw new NegativeAmountException(amount);
   }
 
+  public void updateLastUpdateInstant()
+  {
+    this.lastUpdateInstant = now();
+  }
+
   @Override public boolean equals(Object o)
   {
     if (this == o)
@@ -79,5 +93,14 @@ public class Account
   @Override public int hashCode()
   {
     return Objects.hash(name, currency, balance);
+  }
+
+  @Override public String toString()
+  {
+    return "Account{" +
+        "name='" + name + '\'' +
+        ", currency=" + currency +
+        ", balance=" + balance +
+        '}';
   }
 }

@@ -1,7 +1,6 @@
 package com.revolut.moneytransfer.adapter;
 
-import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
-import com.revolut.moneytransfer.domain.exception.CustomerNotFoundException;
+import com.revolut.moneytransfer.domain.exception.*;
 import com.revolut.moneytransfer.domain.model.Account;
 import com.revolut.moneytransfer.domain.repository.CustomerAccountRepository;
 
@@ -30,13 +29,23 @@ public class InMemoryCustomerAccountRepository implements CustomerAccountReposit
         .orElseThrow(() -> new AccountNotFoundException(accountID));
   }
 
-  @Override public void updateAccount(String customerId, Account updated)
+  @Override public void updateAccountBalanceFor(String customerId, Account toSave)
   {
-    Account previous = lookup(customerId, updated.name());
+    Account current = lookup(customerId, toSave.name());
     List<Account> accounts = storage.get(customerId);
-    accounts.remove(previous);
-    accounts.add(updated);
+
+    checkForConcurrentUpdate(toSave, current);
+
+    toSave.updateLastUpdateInstant();
+    accounts.remove(current);
+    accounts.add(toSave);
 
     storage.put(customerId, accounts);
+  }
+
+  private void checkForConcurrentUpdate(Account toSave, Account current)
+  {
+    if (current.lastUpdateInstant().isAfter(toSave.lastUpdateInstant()))
+      throw new ConcurrentAccountUpdateException(toSave.name());
   }
 }

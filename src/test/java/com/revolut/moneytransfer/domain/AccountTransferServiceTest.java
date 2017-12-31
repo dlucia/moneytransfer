@@ -1,5 +1,6 @@
 package com.revolut.moneytransfer.domain;
 
+import com.revolut.moneytransfer.domain.exception.ConcurrentAccountUpdateException;
 import com.revolut.moneytransfer.domain.exception.InsufficientBalanceException;
 import com.revolut.moneytransfer.domain.model.*;
 import com.revolut.moneytransfer.domain.repository.*;
@@ -12,12 +13,13 @@ import java.math.BigDecimal;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
+import static java.time.Instant.now;
 import static org.javamoney.moneta.Money.of;
 
 public class AccountTransferServiceTest
 {
-  private static final Account EUR_ACCOUNT = new Account("EUR", of(TEN, "EUR"));
-  private static final Account CHF_ACCOUNT = new Account("CHF", of(ONE, "CHF"));
+  private Account eurAccount;
+  private Account chfAccount;
   private static final CurrencyRate EUR_CHF_RATE = new CurrencyRate(new BigDecimal("1.5"));
   private static final String CUSTOMER_ID = "aaa";
 
@@ -35,6 +37,8 @@ public class AccountTransferServiceTest
   @Before
   public void setUp()
   {
+    eurAccount = new Account("EUR", of(TEN, "EUR"), now());
+    chfAccount = new Account("CHF", of(ONE, "CHF"), now());
     transferService = new AccountTransferService(customerAccountRepository,
                                                  exchangeRateRepository,
                                                  transferRepository);
@@ -48,17 +52,21 @@ public class AccountTransferServiceTest
     context.checking(new Expectations()
     {{
       allowing(customerAccountRepository).lookup(CUSTOMER_ID, transferRequest.from());
-      will(returnValue(EUR_ACCOUNT));
+      will(returnValue(eurAccount));
       allowing(customerAccountRepository).lookup(CUSTOMER_ID, transferRequest.to());
-      will(returnValue(CHF_ACCOUNT));
+      will(returnValue(chfAccount));
 
-      allowing(exchangeRateRepository).rateFor(EUR_ACCOUNT.currency(), CHF_ACCOUNT.currency());
+      allowing(exchangeRateRepository).rateFor(eurAccount.currency(), chfAccount.currency());
       will(returnValue(EUR_CHF_RATE));
 
-      oneOf(customerAccountRepository).updateAccount(CUSTOMER_ID,
-                                                     new Account("EUR", of(new BigDecimal("9"), "EUR")));
-      oneOf(customerAccountRepository).updateAccount(CUSTOMER_ID,
-                                                     new Account("CHF", of(new BigDecimal("2.5"), "CHF")));
+      oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
+                                                               new Account("EUR",
+                                                                           of(new BigDecimal("9"), "EUR"),
+                                                                           now()));
+      oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
+                                                               new Account("CHF",
+                                                                           of(new BigDecimal("2.5"), "CHF"),
+                                                                           now()));
 
       oneOf(transferRepository).save(new AccountTransfer(CUSTOMER_ID,
                                                          transferRequest.from(),
@@ -82,12 +90,46 @@ public class AccountTransferServiceTest
     context.checking(new Expectations()
     {{
       allowing(customerAccountRepository).lookup(CUSTOMER_ID, transfer.from());
-      will(returnValue(EUR_ACCOUNT));
+      will(returnValue(eurAccount));
       allowing(customerAccountRepository).lookup(CUSTOMER_ID, transfer.to());
-      will(returnValue(CHF_ACCOUNT));
+      will(returnValue(chfAccount));
 
-      allowing(exchangeRateRepository).rateFor(EUR_ACCOUNT.currency(), CHF_ACCOUNT.currency());
+      allowing(exchangeRateRepository).rateFor(eurAccount.currency(), chfAccount.currency());
       will(returnValue(EUR_CHF_RATE));
+    }});
+
+    transferService.execute(transfer);
+  }
+
+  @Test(expected = ConcurrentAccountUpdateException.class)
+  public void concurrentAccountUpdate()
+  {
+    AccountTransferRequest transfer = new AccountTransferRequest(CUSTOMER_ID,
+                                                                 "EUR",
+                                                                 "CHF",
+                                                                 new BigDecimal("8"),
+                                                                 "");
+
+    context.checking(new Expectations()
+    {{
+      allowing(customerAccountRepository).lookup(CUSTOMER_ID, transfer.from());
+      will(returnValue(eurAccount));
+      allowing(customerAccountRepository).lookup(CUSTOMER_ID, transfer.to());
+      will(returnValue(chfAccount));
+
+      allowing(exchangeRateRepository).rateFor(eurAccount.currency(), chfAccount.currency());
+      will(returnValue(EUR_CHF_RATE));
+
+      oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
+                                                               new Account("EUR",
+                                                                           of(new BigDecimal("2"), "EUR"),
+                                                                           now()));
+      will(throwException(new ConcurrentAccountUpdateException("")));
+
+      never(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
+                                                               new Account("CHF",
+                                                                           of(new BigDecimal("13"), "CHF"),
+                                                                           now()));
     }});
 
     transferService.execute(transfer);

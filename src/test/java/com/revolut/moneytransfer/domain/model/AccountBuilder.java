@@ -2,6 +2,8 @@ package com.revolut.moneytransfer.domain.model;
 
 import javax.money.MonetaryAmount;
 
+import java.time.Instant;
+
 import static org.javamoney.moneta.Money.of;
 
 public class AccountBuilder
@@ -30,6 +32,6 @@ public class AccountBuilder
 
   public Account build()
   {
-    return new Account(name, amount);
+    return new Account(name, amount, Instant.now());
   }
 }

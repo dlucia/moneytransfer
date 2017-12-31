@@ -1,12 +1,11 @@
 package com.revolut.moneytransfer.adapter;
 
-import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
-import com.revolut.moneytransfer.domain.exception.CustomerNotFoundException;
+import com.revolut.moneytransfer.domain.exception.*;
 import com.revolut.moneytransfer.domain.model.Account;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 
 import static com.revolut.moneytransfer.domain.model.AccountBuilder.anAccount;
@@ -19,8 +18,9 @@ import static org.junit.Assert.assertThat;
 
 public class InMemoryCustomerAccountRepositoryTest
 {
-  private static final Account EUR_ACCOUNT = new Account("EUR", of(new BigDecimal("14.15"), "EUR"));
-  private static final Account CHF_ACCOUNT = new Account("CHF", of(ONE, "CHF"));
+  private static final Account EUR_ACCOUNT = new Account("EUR", of(new BigDecimal("14.15"), "EUR"),
+                                                         Instant.now());
+  private static final Account CHF_ACCOUNT = new Account("CHF", of(ONE, "CHF"), Instant.now());
   private static final Account NOT_EXISTENT_ACCOUNT = anAccount().withName("XXX").build();
   private static final String CUSTOMER_ID = "cc1";
   private static final String NOT_EXISTENT_CUSTOMER_ID = "xxx";
@@ -63,19 +63,41 @@ public class InMemoryCustomerAccountRepositoryTest
   }
 
   @Test
-  public void updateAccount()
+  public void balanceAccountUpdate()
   {
     assertThat(storage.get(CUSTOMER_ID), containsInAnyOrder(EUR_ACCOUNT, CHF_ACCOUNT));
 
-    Account account = new Account(EUR_ACCOUNT.name(), of(new BigDecimal("4.55"), EUR_ACCOUNT.name()));
-    repository.updateAccount(CUSTOMER_ID, account);
+    Account account = new Account(EUR_ACCOUNT.name(), of(new BigDecimal("4.55"), EUR_ACCOUNT.name()),
+                                  Instant.now());
+    repository.updateAccountBalanceFor(CUSTOMER_ID, account);
+
     assertThat(storage.get(CUSTOMER_ID), containsInAnyOrder(CHF_ACCOUNT, account));
+  }
+
+  @Test(expected = ConcurrentAccountUpdateException.class)
+  public void concurrentBalanceAccountUpdate()
+  {
+    assertThat(storage.get(CUSTOMER_ID), containsInAnyOrder(EUR_ACCOUNT, CHF_ACCOUNT));
+
+    simulateAConcurrentUpdateFor(EUR_ACCOUNT);
+    repository.updateAccountBalanceFor(CUSTOMER_ID, EUR_ACCOUNT);
+
+    assertThat(storage.get(CUSTOMER_ID), containsInAnyOrder(CHF_ACCOUNT, EUR_ACCOUNT));
+  }
+
+  private void simulateAConcurrentUpdateFor(Account eurAccount)
+  {
+    storage.put(CUSTOMER_ID, new ArrayList<Account>()
+    {{
+      add(new Account("EUR", of(new BigDecimal("14.15"), "EUR"), Instant.now()));
+      add(CHF_ACCOUNT);
+    }});
   }
 
   @Test(expected = AccountNotFoundException.class)
   public void updateNotExistentAccount()
   {
-    repository.updateAccount(CUSTOMER_ID, NOT_EXISTENT_ACCOUNT);
+    repository.updateAccountBalanceFor(CUSTOMER_ID, NOT_EXISTENT_ACCOUNT);
   }
 
 }

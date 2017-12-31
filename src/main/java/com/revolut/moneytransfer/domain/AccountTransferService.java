@@ -3,6 +3,8 @@ package com.revolut.moneytransfer.domain;
 import com.revolut.moneytransfer.domain.model.*;
 import com.revolut.moneytransfer.domain.repository.*;
 
+import java.math.BigDecimal;
+
 public class AccountTransferService
 {
   private final CustomerAccountRepository customerAccountRepository;
@@ -25,11 +27,7 @@ public class AccountTransferService
 
     CurrencyRate currencyRate = exchangeRateRepository.rateFor(from.currency(), to.currency());
 
-    from.reduceBalanceOf(transfer.amount());
-    to.increaseBalanceOf(transfer.amount().multiply(currencyRate.value()));
-
-    customerAccountRepository.updateAccount(transfer.customerId(), from);
-    customerAccountRepository.updateAccount(transfer.customerId(), to);
+    updateBalance(transfer.customerId(), from, to, transfer.amount(), currencyRate);
 
     transferRepository.save(new AccountTransfer(transfer.customerId(),
                                                 transfer.from(),
@@ -37,5 +35,15 @@ public class AccountTransferService
                                                 transfer.amount(),
                                                 currencyRate.value(),
                                                 transfer.getNote()));
+  }
+
+  private void updateBalance(String customerId, Account fromAccount, Account toAccount,
+                             BigDecimal amount, CurrencyRate currencyRate)
+  {
+    fromAccount.reduceBalanceOf(amount);
+    toAccount.increaseBalanceOf(amount.multiply(currencyRate.value()));
+
+    customerAccountRepository.updateAccountBalanceFor(customerId, fromAccount);
+    customerAccountRepository.updateAccountBalanceFor(customerId, toAccount);
   }
 }
