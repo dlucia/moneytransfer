@@ -1,7 +1,6 @@
 package com.revolut.moneytransfer.adapter.jdbc;
 
-import com.revolut.moneytransfer.domain.exception.AccountNotFoundException;
-import com.revolut.moneytransfer.domain.exception.DatabaseException;
+import com.revolut.moneytransfer.domain.exception.*;
 import com.revolut.moneytransfer.domain.model.Account;
 import com.revolut.moneytransfer.domain.repository.CustomerAccountRepository;
 import org.javamoney.moneta.Money;
@@ -66,23 +65,23 @@ public class JdbcCustomerAccountRepository implements CustomerAccountRepository
     return accounts;
   }
 
-  @Override public void updateAccountBalanceFor(String customerId, Account account)
+  @Override public void updateAccountBalanceFor(String customerId,
+                                                Account fromAccount,
+                                                Account toAccount)
   {
     Connection connection = null;
     try
     {
       connection = dataSource.getConnection();
-      PreparedStatement statement = connection
-          .prepareStatement("UPDATE ACCOUNT SET BALANCE=?, LAST_UPDATE=? WHERE CUSTOMER_ID=? AND NAME=?");
-      statement.setString(1, account.balance().getNumber().toString());
-      statement.setTimestamp(2, new Timestamp(now().toEpochMilli()));
-      statement.setString(3, customerId);
-      statement.setString(4, account.name());
+      connection.setAutoCommit(false);
 
-      int rowAffected = statement.executeUpdate();
-      if (rowAffected == 0)
-        throw new AccountNotFoundException(account.name());
+      checkForConcurrentUpdateOn(customerId, fromAccount);
+      updateAccount(customerId, fromAccount, connection);
 
+      checkForConcurrentUpdateOn(customerId, toAccount);
+      updateAccount(customerId, toAccount, connection);
+
+      connection.commit();
     }
     catch (SQLException e)
     {
@@ -94,12 +93,35 @@ public class JdbcCustomerAccountRepository implements CustomerAccountRepository
     }
   }
 
+  private void checkForConcurrentUpdateOn(String customerId, Account account)
+  {
+    Account from = lookup(customerId, account.name());
+    if (from.lastUpdateInstant().isAfter(account.lastUpdateInstant()))
+      throw new ConcurrentAccountUpdateException(from.name());
+  }
+
+  private void updateAccount(String customerId, Account account, Connection connection) throws SQLException
+  {
+    PreparedStatement statement = connection
+        .prepareStatement("UPDATE ACCOUNT SET BALANCE=?, LAST_UPDATE=? WHERE CUSTOMER_ID=? AND NAME=?");
+    statement.setString(1, account.balance().getNumber().toString());
+    statement.setTimestamp(2, new Timestamp(now().toEpochMilli()));
+    statement.setString(3, customerId);
+    statement.setString(4, account.name());
+
+    int rowAffected = statement.executeUpdate();
+    if (rowAffected == 0)
+      throw new AccountNotFoundException(account.name());
+  }
+
   private void closeConnection(Connection connection)
   {
     try
     {
       connection.close();
     }
-    catch (SQLException ignored) {}
+    catch (SQLException ignored)
+    {
+    }
   }
 }

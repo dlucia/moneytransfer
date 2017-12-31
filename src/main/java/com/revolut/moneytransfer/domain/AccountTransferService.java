@@ -43,7 +43,6 @@ public class AccountTransferService
     fromAccount.reduceBalanceOf(amount);
     toAccount.increaseBalanceOf(amount.multiply(currencyRate.value()));
 
-    customerAccountRepository.updateAccountBalanceFor(customerId, fromAccount);
-    customerAccountRepository.updateAccountBalanceFor(customerId, toAccount);
+    customerAccountRepository.updateAccountBalanceFor(customerId, fromAccount,toAccount);
   }
 }

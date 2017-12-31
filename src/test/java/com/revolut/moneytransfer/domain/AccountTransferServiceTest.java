@@ -62,8 +62,7 @@ public class AccountTransferServiceTest
       oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
                                                                new Account("EUR",
                                                                            of(new BigDecimal("9"), "EUR"),
-                                                                           now()));
-      oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
+                                                                           now()),
                                                                new Account("CHF",
                                                                            of(new BigDecimal("2.5"), "CHF"),
                                                                            now()));
@@ -123,13 +122,11 @@ public class AccountTransferServiceTest
       oneOf(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
                                                                new Account("EUR",
                                                                            of(new BigDecimal("2"), "EUR"),
-                                                                           now()));
-      will(throwException(new ConcurrentAccountUpdateException("")));
-
-      never(customerAccountRepository).updateAccountBalanceFor(CUSTOMER_ID,
+                                                                           now()),
                                                                new Account("CHF",
                                                                            of(new BigDecimal("13"), "CHF"),
                                                                            now()));
+      will(throwException(new ConcurrentAccountUpdateException("")));
     }});
 
     transferService.execute(transfer);
