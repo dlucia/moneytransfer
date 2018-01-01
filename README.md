@@ -19,7 +19,8 @@ So I left it empty and the API behave as a command, without any response body.
 To handle money and currency I used **moneta** library, which handles all the operations on money.
 It handles very efficiently the rounding, which is a difficult matter since different currency have different decimal policy 
 (i.e EUR is like this ##.##€, whilst JPY is without decimals ##¥)
-5. *Locking/Concurrency policy on account update?* I went with optimistic locking, using timestamp to validate an update.
+5. *Locking/Concurrency policy on account update?* I went with optimistic locking, using timestamp to validate an update. Decided to return an error, but it could be handle also with a retry o other. I thought the important part is to detect it
+
 # How to run
 
 From the root folder:
