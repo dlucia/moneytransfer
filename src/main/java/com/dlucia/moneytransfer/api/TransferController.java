@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.accepted;
 
-@Path("v1/transfers")
+@Path("v1/customers")
 public class TransferController
 {
   private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
@@ -30,11 +30,12 @@ public class TransferController
   }
 
   @POST
+  @Path("/{customerId}/transfers")
   @Consumes(APPLICATION_JSON)
-  public Response transfer(TransferRequestDTO dto)
+  public Response transfer(@PathParam("customerId") String customerId, TransferRequestDTO dto)
   {
     logger.info("IN {}", dto);
-    AccountTransferRequest transfer = converter.convertFrom(dto);
+    AccountTransferRequest transfer = converter.convertFrom(customerId, dto);
     transferService.execute(transfer);
 
     return accepted().build();

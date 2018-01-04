@@ -2,23 +2,18 @@ package com.dlucia.moneytransfer.api;
 
 public class TransferRequestBuilder
 {
-  private String customerId = "ccc";
   private String accountFrom = "xxx";
   private String accountTo = "yyy";
   private String amount = "1";
   private String note;
 
-  private TransferRequestBuilder() {}
+  private TransferRequestBuilder()
+  {
+  }
 
   public static TransferRequestBuilder aTransferRequest()
   {
     return new TransferRequestBuilder();
-  }
-
-  public TransferRequestBuilder withCustomerID(String customerId)
-  {
-    this.customerId = customerId;
-    return this;
   }
 
   public TransferRequestBuilder withAccountFrom(String accountFrom)
@@ -47,6 +42,6 @@ public class TransferRequestBuilder
 
   public TransferRequestDTO build()
   {
-    return new TransferRequestDTO(customerId, accountFrom, accountTo, amount, note);
+    return new TransferRequestDTO(accountFrom, accountTo, amount, note);
   }
 }

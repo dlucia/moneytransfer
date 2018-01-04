@@ -5,5 +5,5 @@ import com.dlucia.moneytransfer.domain.model.AccountTransferRequest;
 
 public interface Converter
 {
-  AccountTransferRequest convertFrom(TransferRequestDTO dto);
+  AccountTransferRequest convertFrom(String customerId, TransferRequestDTO dto);
 }

@@ -31,8 +31,8 @@ public class TransferRequestConverterTest
             .withNote("some notes")
             .build();
 
-    assertThat(converter.convertFrom(request),
-               is(new AccountTransferRequest(request.customerId,
+    assertThat(converter.convertFrom("customerId", request),
+               is(new AccountTransferRequest("customerId",
                                              "sender",
                                              "receiver",
                                              TEN,
@@ -47,6 +47,6 @@ public class TransferRequestConverterTest
             .withAmount("a")
             .build();
 
-    converter.convertFrom(request);
+    converter.convertFrom("customerId", request);
   }
 }

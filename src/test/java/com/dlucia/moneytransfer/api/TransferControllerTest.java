@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 
 public class TransferControllerTest
 {
-  private static final String TRANSFER_PATH = "v1/transfers";
+  private static final String TRANSFER_PATH = "v1/customers/{customerId}/transfers";
 
   private HttpServer server;
   private WebTarget target;
@@ -39,9 +39,9 @@ public class TransferControllerTest
   {
     Response response =
         target.path(TRANSFER_PATH)
+            .resolveTemplate("customerId", "customer1")
             .request()
             .post(json(aTransferRequest()
-                           .withCustomerID("customer1")
                            .withAccountFrom("EUR")
                            .withAccountTo("GBP")
                            .build()));
@@ -54,9 +54,9 @@ public class TransferControllerTest
   {
     Response response =
         target.path(TRANSFER_PATH)
+            .resolveTemplate("customerId", "customer1")
             .request()
             .post(json(aTransferRequest()
-                           .withCustomerID("customer1")
                            .withAccountFrom("notExistent")
                            .build()));
 
@@ -69,9 +69,9 @@ public class TransferControllerTest
   {
     Response response =
         target.path(TRANSFER_PATH)
+            .resolveTemplate("customerId", "customer1")
             .request()
             .post(json(aTransferRequest()
-                           .withCustomerID("customer1")
                            .withAccountFrom("EUR")
                            .withAccountTo("GBP")
                            .withAmount("100")
@@ -86,9 +86,9 @@ public class TransferControllerTest
   {
     Response response =
         target.path(TRANSFER_PATH)
+            .resolveTemplate("customerId", "customer1")
             .request()
             .post(json(aTransferRequest()
-                           .withCustomerID("customer1")
                            .withAccountFrom("EUR")
                            .withAccountTo("GBP")
                            .withAmount("-1")

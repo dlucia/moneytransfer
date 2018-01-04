@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 
 public class TransferRequestConverter implements Converter
 {
-  @Override public AccountTransferRequest convertFrom(TransferRequestDTO dto)
+  @Override public AccountTransferRequest convertFrom(String customerId, TransferRequestDTO dto)
   {
-    return new AccountTransferRequest(dto.customerId,
+    return new AccountTransferRequest(customerId,
                                       dto.accountFrom,
                                       dto.accountTo,
                                       new BigDecimal(dto.amount),

@@ -31,7 +31,7 @@ It runs an http server which listen on uri http://localhost:8080/api
 
 # Endpoint
 
-### POST /v1/transfers
+### POST /v1/customers/{customerId}/transfers
 Create a new transfer between accounts for a customer.
 Response codes:
 * 202 =\> Transfer accepted
@@ -45,7 +45,6 @@ Response codes:
 Body:
 ```
 {
-	"customerId": "customer1",
 	"accountFrom":"EUR",
 	"accountTo":"GBP",
 	"amount":"8",
