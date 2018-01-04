@@ -34,7 +34,7 @@ public class TransferController
   @Consumes(APPLICATION_JSON)
   public Response transfer(@PathParam("customerId") String customerId, TransferRequestDTO dto)
   {
-    logger.info("IN {}", dto);
+    logger.info("Transfer request {} from {}", dto, customerId);
     AccountTransferRequest transfer = converter.convertFrom(customerId, dto);
     transferService.execute(transfer);
 
